@@ -1,0 +1,8 @@
+﻿CLSCTX
+CoCreateInstance
+CoTaskMemFree
+ISpellChecker
+ISpellCheckerFactory
+S_FALSE
+S_OK
+SpellCheckerFactory

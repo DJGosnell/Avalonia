@@ -392,7 +392,7 @@ namespace Avalonia.Controls.Presenters
                 var length = Math.Max(selectionStart, selectionEnd) - start;
 
                 var rects = TextLayout.HitTestTextRange(start, length);
-
+                //SKPaintCasche
                 foreach (var rect in rects)
                 {
                     context.FillRectangle(selectionBrush, PixelRect.FromRect(rect, 1).ToRect(1));

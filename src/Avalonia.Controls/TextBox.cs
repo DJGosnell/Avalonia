@@ -210,6 +210,14 @@ namespace Avalonia.Controls
             AvaloniaProperty.Register<TextBox, bool>(nameof(RevealPassword));
 
         /// <summary>
+        /// Defines the <see cref="CanSpellCheck"/> property
+        /// </summary>
+        public static readonly DirectProperty<TextBox, bool> EnableSpellCheckProperty =
+            AvaloniaProperty.RegisterDirect<TextBox, bool>(
+                nameof(CanSpellCheck),
+                o => o.CanSpellCheck);
+
+        /// <summary>
         /// Defines the <see cref="CanCut"/> property
         /// </summary>
         public static readonly DirectProperty<TextBox, bool> CanCutProperty =
@@ -321,6 +329,7 @@ namespace Avalonia.Controls
         private readonly TextBoxTextInputMethodClient _imClient = new();
         private readonly UndoRedoHelper<UndoRedoState> _undoRedoHelper;
         private bool _isUndoingRedoing;
+        private bool _canSpellCheck;
         private bool _canCut;
         private bool _canCopy;
         private bool _canPaste;
@@ -707,6 +716,15 @@ namespace Avalonia.Controls
         }
 
         /// <summary>
+        /// Property for determining if the spell checking can be run.
+        /// </summary>
+        public bool CanSpellCheck
+        {
+            get => _canSpellCheck;
+            private set => SetAndRaise(EnableSpellCheckProperty, ref _canSpellCheck, value);
+        }
+
+        /// <summary>
         /// Property for determining if the Cut command can be executed.
         /// </summary>
         public bool CanCut
@@ -959,6 +977,7 @@ namespace Avalonia.Controls
             CanCopy = !IsPasswordBox && !isSelectionNullOrEmpty;
             CanCut = !IsPasswordBox && !isSelectionNullOrEmpty && !IsReadOnly;
             CanPaste = !IsReadOnly;
+            CanSpellCheck = !IsPasswordBox && !IsReadOnly;
         }
 
         protected override void OnGotFocus(GotFocusEventArgs e)
