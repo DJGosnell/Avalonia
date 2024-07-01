@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Avalonia.Collections;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
@@ -519,6 +520,9 @@ namespace Avalonia.Controls.Presenters
             }
         }
 
+        public List<ValueSpan<TextRunProperties>>? TextStyleOverrides { get; set; } =
+            new List<ValueSpan<TextRunProperties>>();
+
         /// <summary>
         /// Creates the <see cref="TextLayout"/> used to render the text.
         /// </summary>
@@ -535,10 +539,11 @@ namespace Avalonia.Controls.Presenters
             var selectionEnd = SelectionEnd;
             var start = Math.Min(selectionStart, selectionEnd);
             var length = Math.Max(selectionStart, selectionEnd) - start;
+            var foreground = Foreground;
+
 
             IReadOnlyList<ValueSpan<TextRunProperties>>? textStyleOverrides = null;
 
-            var foreground = Foreground;
 
             if (!string.IsNullOrEmpty(preeditText))
             {

@@ -29,6 +29,7 @@ using Avalonia.Threading;
 using static Avalonia.Controls.Platform.IWin32OptionsTopLevelImpl;
 using static Avalonia.Controls.Win32Properties;
 using Avalonia.Logging;
+using Avalonia.Platform.Spelling;
 
 namespace Avalonia.Win32
 {
@@ -355,6 +356,11 @@ namespace Avalonia.Win32
             if (featureType == typeof(IClipboard))
             {
                 return AvaloniaLocator.Current.GetRequiredService<IClipboard>();
+            }
+
+            if (featureType == typeof(ISpellChecker))
+            {
+                return AvaloniaLocator.Current.GetRequiredService<ISpellChecker>();
             }
 
             if (featureType == typeof(IInputPane))

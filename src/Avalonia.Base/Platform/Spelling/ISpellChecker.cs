@@ -10,4 +10,7 @@ namespace Avalonia.Platform.Spelling;
 [NotClientImplementable]
 public interface ISpellChecker
 {
+    bool TryInitializeLanguage(string language);
+    bool IsLanguageSupported(string language); 
+    SpellCheckError[] SpellCheck(string input);
 }

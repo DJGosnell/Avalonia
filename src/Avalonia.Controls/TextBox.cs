@@ -16,7 +16,11 @@ using Avalonia.Utilities;
 using Avalonia.Controls.Metadata;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Automation.Peers;
+using Avalonia.Collections;
+using Avalonia.Media.Immutable;
 using Avalonia.Media.TextFormatting.Unicode;
+using Avalonia.Platform;
+using Avalonia.Platform.Spelling;
 using Avalonia.Threading;
 
 namespace Avalonia.Controls
@@ -326,6 +330,7 @@ namespace Avalonia.Controls
 
         private TextPresenter? _presenter;
         private ScrollViewer? _scrollViewer;
+        private SpellChecker? _spellChecker;
         private readonly TextBoxTextInputMethodClient _imClient = new();
         private readonly UndoRedoHelper<UndoRedoState> _undoRedoHelper;
         private bool _isUndoingRedoing;
@@ -871,6 +876,18 @@ namespace Avalonia.Controls
             }
         }
 
+
+        //private static TextDecorationCollection s_spellingTextDecorationCollection = new TextDecorationCollection(new[]
+        //{
+        //    new TextDecoration()
+        //    {
+        //        Location = TextDecorationLocation.Underline,
+        //        StrokeDashArray = new AvaloniaList<double>(0, 1),
+        //        Stroke = new ImmutableSolidColorBrush(Brushes.Red),
+        //        StrokeThickness = 2
+        //    }
+        //});
+
         private void ScrollViewer_ScrollChanged(object? sender, ScrollChangedEventArgs e)
         {
             _presenter?.TextSelectionHandleCanvas?.MoveHandlesToSelection();
@@ -889,6 +906,12 @@ namespace Avalonia.Controls
 
                 _presenter.PropertyChanged += PresenterPropertyChanged;
             }
+
+            if (e.Root is TopLevel topLevel)
+            {
+                var spellCheckFeature = topLevel.PlatformImpl.TryGetFeature<ISpellChecker>();
+                _spellChecker = new SpellChecker(spellCheckFeature);
+            }
         }
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -901,6 +924,9 @@ namespace Avalonia.Controls
 
                 _presenter.PropertyChanged -= PresenterPropertyChanged;
             }
+
+            _spellChecker?.Dispose();
+            _spellChecker = null;
 
             _imClient.SetPresenter(null, null);
         }

@@ -19,6 +19,7 @@ using Avalonia.Win32.Input;
 using Avalonia.Win32.Interop;
 using static Avalonia.Win32.Interop.UnmanagedMethods;
 using System.Collections.Generic;
+using Avalonia.Platform.Spelling;
 
 namespace Avalonia
 {
@@ -88,6 +89,7 @@ namespace Avalonia.Win32
 
             AvaloniaLocator.CurrentMutable
                 .Bind<IClipboard>().ToSingleton<ClipboardImpl>()
+                .Bind<ISpellChecker>().ToSingleton<SpellCheckerImpl>()
                 .Bind<ICursorFactory>().ToConstant(CursorFactory.Instance)
                 .Bind<IKeyboardDevice>().ToConstant(WindowsKeyboardDevice.Instance)
                 .Bind<IPlatformSettings>().ToSingleton<Win32PlatformSettings>()
