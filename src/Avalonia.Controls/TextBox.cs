@@ -909,8 +909,9 @@ namespace Avalonia.Controls
 
             if (e.Root is TopLevel topLevel)
             {
-                var spellCheckFeature = topLevel.PlatformImpl.TryGetFeature<ISpellChecker>();
-                _spellChecker = new SpellChecker(spellCheckFeature);
+                var spellCheckFeature = topLevel.PlatformImpl?.TryGetFeature<ISpellChecker>();
+                if(spellCheckFeature != null)
+                    _spellChecker = new SpellChecker(spellCheckFeature);
             }
         }
 

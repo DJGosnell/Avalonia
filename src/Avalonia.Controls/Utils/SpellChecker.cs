@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Spelling;
+using Avalonia.Threading;
 using Avalonia.Utilities;
 
 namespace Avalonia.Controls.Utils
@@ -14,7 +15,7 @@ namespace Avalonia.Controls.Utils
     {
         private readonly ISpellChecker _spellChecker;
         private DelayedAction<SpellChecker> _delayedSpellCheckAction;
-        private string _text;
+        private string? _text;
 
         public Action<SpellCheckError[]>? SpellCheckCompleted { get; set; }
 
@@ -32,6 +33,10 @@ namespace Avalonia.Controls.Utils
 
         private static void SpellCheck(SpellChecker spellChecker)
         {
+            if (string.IsNullOrWhiteSpace(spellChecker._text))
+                return;
+
+            Dispatcher.UIThread.AddTimer(new DispatcherTimer());
             var errors = spellChecker._spellChecker.SpellCheck(spellChecker._text); 
             spellChecker.SpellCheckCompleted?.Invoke(errors);
 
@@ -70,6 +75,7 @@ namespace Avalonia.Controls.Utils
                 _maxCullingDelay = maxCullingDelay;
                 _action = action ?? throw new ArgumentNullException(nameof(action));
                 _state = state;
+                Dispatcher.UIThread.AddTimer();
                 _timer = new Timer(TimerCallback, this, Timeout.Infinite, Timeout.Infinite);
             }
 
